@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Hard Checkers - AI vs Human</title>
+    <title>Super Qiyin Shashka - AI ga qarshi Inson</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -12,8 +12,10 @@
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             grid-template-rows: repeat(8, 1fr);
-            width: 640px;
-            height: 640px;
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            aspect-ratio: 1/1;
             border: 4px solid #8B4513;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
@@ -103,59 +105,47 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        
-        /* Timer animation */
-        @keyframes timerShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        
-        .timer-warning {
-            animation: timerShake 0.5s infinite;
-            color: #FF0000 !important;
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <header class="text-center mb-8">
-            <h1 class="text-5xl font-bold mb-4 text-yellow-400">
-                <i class="fas fa-chess-board mr-4"></i>Super Hard Checkers - AI vs Human
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-yellow-400">
+                <i class="fas fa-chess-board mr-4"></i>Super Qiyin Shashka - AI ga qarshi Inson
             </h1>
-            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                Play against an unbeatable AI. Even the best players lose within 4-5 minutes. Can you survive?
+            <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                Yengib bo'lmaydigan AI ga qarshi o'yna. Eng yaxshi o'yinchilar ham 4-5 daqiqada yutqazadi. Sen chidaysanmi?
             </p>
         </header>
 
-        <div class="flex flex-col lg:flex-row items-center justify-center gap-8">
+        <div class="flex flex-col items-center gap-8">
             <!-- Game Board -->
-            <div class="flex flex-col items-center">
-                <div id="board" class="board mb-6"></div>
+            <div class="flex flex-col items-center w-full">
+                <div id="board" class="board mb-6 mx-auto"></div>
                 
-                <div class="flex gap-4 mb-6">
+                <div class="flex flex-wrap justify-center gap-4 mb-6">
                     <button id="new-game" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
-                        <i class="fas fa-play mr-2"></i>New Game
+                        <i class="fas fa-play mr-2"></i>Yangi o'yin
                     </button>
                     <button id="undo-move" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
-                        <i class="fas fa-undo mr-2"></i>Undo Move
+                        <i class="fas fa-undo mr-2"></i>Orqaga qaytarish
                     </button>
                     <button id="hint" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
-                        <i class="fas fa-lightbulb mr-2"></i>Hint
+                        <i class="fas fa-lightbulb mr-2"></i>Maslahat
                     </button>
                 </div>
             </div>
 
             <!-- Game Info Panel -->
-            <div class="bg-gray-800 rounded-xl p-6 shadow-2xl w-full lg:w-96">
+            <div class="bg-gray-800 rounded-xl p-6 shadow-2xl w-full max-w-lg">
                 <div class="mb-8">
                     <h2 class="text-2xl font-bold mb-4 text-yellow-300">
-                        <i class="fas fa-gamepad mr-2"></i>Game Status
+                        <i class="fas fa-gamepad mr-2"></i>O'yin holati
                     </h2>
                     
                     <div class="grid grid-cols-2 gap-4 mb-6">
                         <div class="bg-gray-900 p-4 rounded-lg text-center">
-                            <div class="text-sm text-gray-400 mb-1">Human</div>
+                            <div class="text-sm text-gray-400 mb-1">Inson</div>
                             <div id="human-score" class="text-3xl font-bold text-red-400">12</div>
                             <div class="flex justify-center mt-2">
                                 <div class="piece human w-6 h-6 mr-1"></div>
@@ -173,47 +163,34 @@
                         </div>
                     </div>
                     
-                    <div class="bg-gray-900 p-4 rounded-lg mb-6">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="text-lg font-semibold">Timer</div>
-                            <div id="timer" class="text-3xl font-bold">04:30</div>
-                        </div>
-                        <div class="w-full bg-gray-700 h-3 rounded-full overflow-hidden">
-                            <div id="timer-bar" class="bg-green-500 h-full" style="width: 100%"></div>
-                        </div>
-                        <div class="text-sm text-gray-400 mt-2">
-                            You WILL lose within 4 minutes against our unbeatable AI
-                        </div>
-                    </div>
-                    
                     <div id="game-status" class="bg-blue-900 p-4 rounded-lg text-center text-xl font-bold">
-                        Human's Turn
+                        Inson navbati
                     </div>
                 </div>
                 
                 <div class="mb-6">
                     <h3 class="text-xl font-bold mb-3 text-yellow-300">
-                        <i class="fas fa-robot mr-2"></i>AI Difficulty
+                        <i class="fas fa-robot mr-2"></i>AI qiyinlik darajasi
                     </h3>
                     <div class="bg-gray-900 p-4 rounded-lg">
-                        <div class="text-lg font-semibold text-red-400 mb-2">IMPOSSIBLE</div>
+                        <div class="text-lg font-semibold text-red-400 mb-2">MUMKIN EMAS</div>
                         <div class="text-sm text-gray-300">
-                            Uses Minimax algorithm with Alpha-Beta pruning (depth 6). Unbeatable - you WILL lose in under 4 minutes!
+                            Minimax algoritmi bilan Alpha-Beta pruning (chuqurlik 6). Yengib bo'lmaydi — 4 daqiqadan kamroq vaqt ichida yutqazasiz!
                         </div>
                     </div>
                 </div>
                 
                 <div>
                     <h3 class="text-xl font-bold mb-3 text-yellow-300">
-                        <i class="fas fa-info-circle mr-2"></i>Game Rules
+                        <i class="fas fa-info-circle mr-2"></i>O'yin qoidalari
                     </h3>
                     <ul class="bg-gray-900 p-4 rounded-lg text-sm space-y-2">
-                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>Human pieces: <span class="text-red-400">Red</span></li>
-                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>AI pieces: <span class="text-blue-400">Blue</span></li>
-                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>Move diagonally forward</li>
-                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>Capture by jumping over opponent pieces</li>
-                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>Kings can move backwards</li>
-                        <li><i class="fas fa fa-exclamation-triangle text-red-400 mr-2"></i><span class="text-red-300">AI is extremely difficult - you will likely lose!</span></li>
+                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>Inson puli: <span class="text-red-400">Qizil</span></li>
+                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>AI puli: <span class="text-blue-400">Ko'k</span></li>
+                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>Diagonal oldinga yurish</li>
+                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>Raqib pulini sakrab olish (urib olish)</li>
+                        <li><i class="fas fa-arrow-right text-green-400 mr-2"></i>Qirol orqaga ham yurishi mumkin</li>
+                        <li><i class="fas fa-exclamation-triangle text-red-400 mr-2"></i><span class="text-red-300">AI juda kuchli — ehtimol yutqazasiz!</span></li>
                     </ul>
                 </div>
             </div>
@@ -222,10 +199,10 @@
         <!-- Moves History -->
         <div class="mt-12 max-w-4xl mx-auto">
             <h2 class="text-2xl font-bold mb-4 text-yellow-300">
-                <i class="fas fa-history mr-2"></i>Moves History
+                <i class="fas fa-history mr-2"></i>Yurishlar tarixi
             </h2>
             <div id="moves-history" class="bg-gray-800 rounded-xl p-4 max-h-60 overflow-y-auto">
-                <div class="text-gray-400 text-center py-4">No moves yet. Make the first move!</div>
+                <div class="text-gray-400 text-center py-4">Hozircha yurish yo'q. Birinchi yurishni qiling!</div>
             </div>
         </div>
     </div>
@@ -237,8 +214,6 @@
         let validMoves = [];
         let currentPlayer = 'human'; // 'human' or 'ai'
         let gameOver = false;
-        let gameTime = 240; // 4 minutes in seconds
-        let timerInterval;
         let moveHistory = [];
         let aiThinking = false;
         let boardHistory = [];
@@ -249,9 +224,8 @@
             setupPieces();
             renderBoard();
             updateGameInfo();
-            startTimer();
             
-            // AI goes first 80% of the time to make it harder
+            // AI 80% hollarda birinchi yuradi (qiyinroq qilish uchun)
             if (Math.random() > 0.2) {
                 setTimeout(() => {
                     currentPlayer = 'ai';
@@ -267,7 +241,6 @@
             for (let row = 0; row < 8; row++) {
                 board[row] = [];
                 for (let col = 0; col < 8; col++) {
-                    // Checkers board: only dark squares are playable
                     const isDark = (row + col) % 2 === 1;
                     board[row][col] = {
                         row,
@@ -281,14 +254,13 @@
 
         // Setup initial pieces
         function setupPieces() {
-            // Clear any existing pieces
             for (let row = 0; row < 8; row++) {
                 for (let col = 0; col < 8; col++) {
                     board[row][col].piece = null;
                 }
             }
             
-            // Human pieces (red) on top rows (0-2)
+            // Inson puli (qizil) yuqorida (0-2 qatorlar)
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 8; col++) {
                     if (board[row][col].isDark) {
@@ -302,7 +274,7 @@
                 }
             }
             
-            // AI pieces (blue) on bottom rows (5-7)
+            // AI puli (ko'k) pastda (5-7 qatorlar)
             for (let row = 5; row < 8; row++) {
                 for (let col = 0; col < 8; col++) {
                     if (board[row][col].isDark) {
@@ -316,7 +288,6 @@
                 }
             }
             
-            // Save initial board state
             saveBoardState();
         }
 
@@ -333,17 +304,14 @@
                     squareElement.dataset.row = row;
                     squareElement.dataset.col = col;
                     
-                    // Add click event for selecting squares
                     squareElement.addEventListener('click', () => handleSquareClick(row, col));
                     
-                    // Add piece if exists
                     if (square.piece) {
                         const pieceElement = document.createElement('div');
                         pieceElement.className = `piece ${square.piece.type} ${square.piece.isKing ? 'king' : ''}`;
                         pieceElement.dataset.row = row;
                         pieceElement.dataset.col = col;
                         
-                        // Add click event for selecting pieces (only human pieces when it's human's turn)
                         if (square.piece.type === 'human' && currentPlayer === 'human' && !gameOver) {
                             pieceElement.addEventListener('click', (e) => {
                                 e.stopPropagation();
@@ -354,7 +322,6 @@
                         squareElement.appendChild(pieceElement);
                     }
                     
-                    // Add valid move indicators
                     const move = validMoves.find(m => m.toRow === row && m.toCol === col);
                     if (move) {
                         const moveIndicator = document.createElement('div');
@@ -374,7 +341,6 @@
             const piece = board[row][col].piece;
             if (!piece || piece.type !== 'human') return;
             
-            // If clicking the same piece, deselect it
             if (selectedPiece && selectedPiece.row === row && selectedPiece.col === col) {
                 selectedPiece = null;
                 validMoves = [];
@@ -385,7 +351,6 @@
             
             renderBoard();
             
-            // Highlight selected piece
             if (selectedPiece) {
                 const pieceElement = document.querySelector(`.piece[data-row="${row}"][data-col="${col}"]`);
                 if (pieceElement) {
@@ -398,7 +363,6 @@
         function handleSquareClick(row, col) {
             if (!selectedPiece || currentPlayer !== 'human' || gameOver || aiThinking) return;
             
-            // Check if this is a valid move
             const move = validMoves.find(m => m.toRow === row && m.toCol === col);
             if (move) {
                 makeMove(selectedPiece.row, selectedPiece.col, row, col, move.captured);
@@ -415,29 +379,26 @@
             const moves = [];
             const directions = [];
             
-            // Determine movement directions based on piece type
             if (piece.type === 'human') {
-                directions.push({ dr: 1, dc: -1 }); // Down-left
-                directions.push({ dr: 1, dc: 1 });  // Down-right
+                directions.push({ dr: 1, dc: -1 });
+                directions.push({ dr: 1, dc: 1 });
                 
                 if (piece.isKing) {
-                    directions.push({ dr: -1, dc: -1 }); // Up-left
-                    directions.push({ dr: -1, dc: 1 });  // Up-right
+                    directions.push({ dr: -1, dc: -1 });
+                    directions.push({ dr: -1, dc: 1 });
                 }
             } else if (piece.type === 'ai') {
-                directions.push({ dr: -1, dc: -1 }); // Up-left
-                directions.push({ dr: -1, dc: 1 });  // Up-right
+                directions.push({ dr: -1, dc: -1 });
+                directions.push({ dr: -1, dc: 1 });
                 
                 if (piece.isKing) {
-                    directions.push({ dr: 1, dc: -1 }); // Down-left
-                    directions.push({ dr: 1, dc: 1 });  // Down-right
+                    directions.push({ dr: 1, dc: -1 });
+                    directions.push({ dr: 1, dc: 1 });
                 }
             }
             
-            // Check for capture moves first (mandatory in checkers)
             let hasCaptures = false;
             
-            // Check each direction for captures
             for (const dir of directions) {
                 const captureRow = row + dir.dr;
                 const captureCol = col + dir.dc;
@@ -462,12 +423,10 @@
                 }
             }
             
-            // If there are captures, only return capture moves (mandatory capture rule)
             if (hasCaptures) {
                 return moves;
             }
             
-            // If no captures, check for regular moves
             for (const dir of directions) {
                 const newRow = row + dir.dr;
                 const newCol = col + dir.dc;
@@ -487,7 +446,7 @@
             return moves;
         }
 
-        // Check if position is valid (within board)
+        // Check if position is valid
         function isValidPosition(row, col) {
             return row >= 0 && row < 8 && col >= 0 && col < 8;
         }
@@ -497,36 +456,28 @@
             const piece = board[fromRow][fromCol].piece;
             if (!piece) return;
             
-            // Save current state for undo
             saveBoardState();
             
-            // Move the piece
             board[toRow][toCol].piece = {...piece, row: toRow, col: toCol};
             board[fromRow][fromCol].piece = null;
             
-            // Check for king promotion
             if (!piece.isKing) {
                 if ((piece.type === 'human' && toRow === 7) || (piece.type === 'ai' && toRow === 0)) {
                     board[toRow][toCol].piece.isKing = true;
                 }
             }
             
-            // Handle capture
             if (captured) {
                 board[captured.row][captured.col].piece = null;
                 
-                // Check for additional captures (multiple jumps)
                 if (piece.type === currentPlayer) {
                     const additionalCaptures = getValidMoves(toRow, toCol).filter(m => m.isCapture);
                     if (additionalCaptures.length > 0) {
-                        // Allow multiple jumps for both human and AI
                         if (piece.type === 'human') {
-                            // Human gets to choose the next jump
                             selectedPiece = { row: toRow, col: toCol };
                             validMoves = additionalCaptures;
                             renderBoard();
                             
-                            // Highlight selected piece
                             const pieceElement = document.querySelector(`.piece[data-row="${toRow}"][data-col="${toCol}"]`);
                             if (pieceElement) {
                                 pieceElement.classList.add('selected');
@@ -536,8 +487,6 @@
                             updateGameInfo();
                             return;
                         } else if (piece.type === 'ai') {
-                            // AI automatically chooses the best continuation
-                            // Find the capture that maximizes advantage
                             let bestCapture = null;
                             let bestScore = -Infinity;
                             
@@ -551,7 +500,6 @@
                             }
                             
                             if (bestCapture) {
-                                // Execute the additional capture immediately
                                 makeMove(toRow, toCol, bestCapture.toRow, bestCapture.toCol, bestCapture.captured);
                                 return;
                             }
@@ -560,40 +508,32 @@
                 }
             }
             
-            // Add to move history
             updateMoveHistory(fromRow, fromCol, toRow, toCol, captured !== null, false);
             
-            // Switch player
             currentPlayer = currentPlayer === 'human' ? 'ai' : 'human';
             
-            // Check for game over
             checkGameOver();
             
-            // Render board and update info
             renderBoard();
             updateGameInfo();
             
-            // If it's AI's turn, make AI move
             if (currentPlayer === 'ai' && !gameOver) {
                 setTimeout(() => makeAIMove(), 500);
             }
         }
 
-        // AI move using Minimax algorithm with Alpha-Beta Pruning
+        // AI move using Minimax with Alpha-Beta Pruning
         function makeAIMove() {
             if (gameOver || currentPlayer !== 'ai') return;
             
             aiThinking = true;
-            document.getElementById('game-status').textContent = 'AI Thinking...';
+            document.getElementById('game-status').textContent = 'AI o\'ylamoqda...';
             document.getElementById('game-status').className = 'bg-purple-900 p-4 rounded-lg text-center text-xl font-bold';
             
-            // Use setTimeout to allow UI to update
             setTimeout(() => {
-                // Get all possible moves for AI
                 const allMoves = getAllValidMoves('ai');
                 
                 if (allMoves.length === 0) {
-                    // No moves available - game over
                     aiThinking = false;
                     currentPlayer = 'human';
                     checkGameOver();
@@ -602,18 +542,11 @@
                 }
                 
                 let chosenMove;
-                
-                // Use Minimax with Alpha-Beta pruning for difficult AI
-                // For very hard difficulty, use depth 6 (increased from 4)
                 const depth = 6;
                 let bestScore = -Infinity;
                 
-                // Try to find the best move using minimax
                 for (const move of allMoves) {
-                    // Make a copy of the board to simulate the move
                     const simulatedBoard = simulateMove(board, move);
-                    
-                    // Evaluate the position after this move
                     const score = minimax(simulatedBoard, depth - 1, -Infinity, Infinity, false);
                     
                     if (score > bestScore) {
@@ -622,9 +555,7 @@
                     }
                 }
                 
-                // If minimax didn't choose a move (shouldn't happen), use fallback
                 if (!chosenMove) {
-                    // First, prioritize captures
                     const captureMoves = allMoves.filter(move => move.isCapture);
                     if (captureMoves.length > 0) {
                         chosenMove = chooseBestCapture(captureMoves);
@@ -633,7 +564,6 @@
                     }
                 }
                 
-                // Execute the chosen move
                 setTimeout(() => {
                     makeMove(
                         chosenMove.fromRow, 
@@ -647,9 +577,8 @@
             }, 100);
         }
         
-        // Minimax algorithm with Alpha-Beta pruning
+        // Minimax algorithm
         function minimax(boardState, depth, alpha, beta, maximizingPlayer) {
-            // Check for terminal node or depth limit
             if (depth === 0) {
                 return evaluateBoard(boardState);
             }
@@ -657,7 +586,6 @@
             const player = maximizingPlayer ? 'ai' : 'human';
             const moves = getAllValidMovesForBoard(boardState, player);
             
-            // If no moves available, it's a terminal state
             if (moves.length === 0) {
                 return evaluateBoard(boardState);
             }
@@ -669,9 +597,7 @@
                     const eval = minimax(newBoard, depth - 1, alpha, beta, false);
                     maxEval = Math.max(maxEval, eval);
                     alpha = Math.max(alpha, eval);
-                    if (beta <= alpha) {
-                        break; // Beta cutoff
-                    }
+                    if (beta <= alpha) break;
                 }
                 return maxEval;
             } else {
@@ -681,17 +607,14 @@
                     const eval = minimax(newBoard, depth - 1, alpha, beta, true);
                     minEval = Math.min(minEval, eval);
                     beta = Math.min(beta, eval);
-                    if (beta <= alpha) {
-                        break; // Alpha cutoff
-                    }
+                    if (beta <= alpha) break;
                 }
                 return minEval;
             }
         }
         
-        // Simulate a move on a board state
+        // Simulate move
         function simulateMove(boardState, move) {
-            // Create a deep copy of the board
             const newBoard = [];
             for (let row = 0; row < 8; row++) {
                 newBoard[row] = [];
@@ -706,17 +629,14 @@
                 }
             }
             
-            // Apply the move
             const piece = newBoard[move.fromRow][move.fromCol].piece;
             newBoard[move.toRow][move.toCol].piece = {...piece, row: move.toRow, col: move.toCol};
             newBoard[move.fromRow][move.fromCol].piece = null;
             
-            // Handle capture
             if (move.captured) {
                 newBoard[move.captured.row][move.captured.col].piece = null;
             }
             
-            // Check for king promotion
             if (piece && !piece.isKing) {
                 if ((piece.type === 'human' && move.toRow === 7) || 
                     (piece.type === 'ai' && move.toRow === 0)) {
@@ -727,15 +647,11 @@
             return newBoard;
         }
         
-        // Evaluate the board state (AI perspective: positive is good for AI)
+        // Evaluate board (from AI perspective)
         function evaluateBoard(boardState) {
             let score = 0;
-            
-            // Piece values
             const PIECE_VALUE = 10;
             const KING_VALUE = 30;
-            
-            // Position bonuses
             const CENTER_BONUS = 0.5;
             const BACK_ROW_BONUS = 3;
             const SAFETY_BONUS = 2;
@@ -747,34 +663,26 @@
                         const pieceValue = piece.isKing ? KING_VALUE : PIECE_VALUE;
                         let positionScore = 0;
                         
-                        // Position matters
                         if (!piece.isKing) {
-                            // Regular pieces get bonus for advancing
                             if (piece.type === 'ai') {
-                                // AI pieces want to move upward (to row 0)
                                 positionScore += (7 - row) * 0.8;
                                 if (row === 0) positionScore += BACK_ROW_BONUS;
                             } else {
-                                // Human pieces want to move downward (to row 7)
                                 positionScore -= row * 0.8;
                                 if (row === 7) positionScore -= BACK_ROW_BONUS;
                             }
                         } else {
-                            // Kings get bonus for being in center
                             const centerDist = Math.abs(row - 3.5) + Math.abs(col - 3.5);
                             positionScore += (8 - centerDist) * CENTER_BONUS;
                         }
                         
-                        // Safety bonus (not under immediate attack)
                         if (isPieceSafeInBoard(boardState, row, col, piece.type)) {
                             positionScore += SAFETY_BONUS;
                         }
                         
-                        // Mobility bonus (number of possible moves)
                         const mobility = getValidMovesForPiece(boardState, row, col).length;
                         positionScore += mobility * 0.5;
                         
-                        // Add to total score (positive for AI, negative for human)
                         if (piece.type === 'ai') {
                             score += pieceValue + positionScore;
                         } else {
@@ -787,7 +695,9 @@
             return score;
         }
         
-        // Check if a piece is safe in a given board state
+        // Helper functions (isPieceSafeInBoard, getValidMovesForPiece, getAllValidMovesForBoard, getAllValidMoves, chooseBestCapture, chooseStrategicMove, evaluateMove, isPieceSafe) 
+        // — oldingi kod bilan bir xil, faqat o'zgartirish kiritilmadi
+
         function isPieceSafeInBoard(boardState, row, col, player) {
             const opponent = player === 'human' ? 'ai' : 'human';
             
@@ -807,7 +717,6 @@
             return true;
         }
         
-        // Get valid moves for a piece in a given board state
         function getValidMovesForPiece(boardState, row, col) {
             const piece = boardState[row][col].piece;
             if (!piece) return [];
@@ -815,26 +724,24 @@
             const moves = [];
             const directions = [];
             
-            // Determine movement directions
             if (piece.type === 'human') {
-                directions.push({ dr: 1, dc: -1 }); // Down-left
-                directions.push({ dr: 1, dc: 1 });  // Down-right
+                directions.push({ dr: 1, dc: -1 });
+                directions.push({ dr: 1, dc: 1 });
                 
                 if (piece.isKing) {
-                    directions.push({ dr: -1, dc: -1 }); // Up-left
-                    directions.push({ dr: -1, dc: 1 });  // Up-right
+                    directions.push({ dr: -1, dc: -1 });
+                    directions.push({ dr: -1, dc: 1 });
                 }
             } else if (piece.type === 'ai') {
-                directions.push({ dr: -1, dc: -1 }); // Up-left
-                directions.push({ dr: -1, dc: 1 });  // Up-right
+                directions.push({ dr: -1, dc: -1 });
+                directions.push({ dr: -1, dc: 1 });
                 
                 if (piece.isKing) {
-                    directions.push({ dr: 1, dc: -1 }); // Down-left
-                    directions.push({ dr: 1, dc: 1 });  // Down-right
+                    directions.push({ dr: 1, dc: -1 });
+                    directions.push({ dr: 1, dc: 1 });
                 }
             }
             
-            // Check for captures first
             let hasCaptures = false;
             
             for (const dir of directions) {
@@ -861,11 +768,8 @@
                 }
             }
             
-            if (hasCaptures) {
-                return moves;
-            }
+            if (hasCaptures) return moves;
             
-            // Regular moves
             for (const dir of directions) {
                 const newRow = row + dir.dr;
                 const newCol = col + dir.dc;
@@ -885,11 +789,8 @@
             return moves;
         }
         
-        // Get all valid moves for a player in a given board state
         function getAllValidMovesForBoard(boardState, player) {
             const moves = [];
-            
-            // First, check for any capture moves (mandatory in checkers)
             let hasCaptures = false;
             
             for (let row = 0; row < 8; row++) {
@@ -907,12 +808,8 @@
                 }
             }
             
-            // If there are captures, only return capture moves
-            if (hasCaptures) {
-                return moves;
-            }
+            if (hasCaptures) return moves;
             
-            // Otherwise, return all regular moves
             for (let row = 0; row < 8; row++) {
                 for (let col = 0; col < 8; col++) {
                     const piece = boardState[row][col].piece;
@@ -925,11 +822,8 @@
             return moves;
         }
 
-        // Get all valid moves for a player
         function getAllValidMoves(player) {
             const moves = [];
-            
-            // First, check for any capture moves (mandatory in checkers)
             let hasCaptures = false;
             
             for (let row = 0; row < 8; row++) {
@@ -947,12 +841,8 @@
                 }
             }
             
-            // If there are captures, only return capture moves
-            if (hasCaptures) {
-                return moves;
-            }
+            if (hasCaptures) return moves;
             
-            // Otherwise, return all regular moves
             for (let row = 0; row < 8; row++) {
                 for (let col = 0; col < 8; col++) {
                     const piece = board[row][col].piece;
@@ -965,9 +855,7 @@
             return moves;
         }
 
-        // Choose the best capture move
         function chooseBestCapture(captureMoves) {
-            // Prioritize captures that result in kinging
             for (const move of captureMoves) {
                 const piece = board[move.fromRow][move.fromCol].piece;
                 if (!piece.isKing) {
@@ -978,8 +866,6 @@
                 }
             }
             
-            // Otherwise, choose the capture that captures the most valuable piece
-            // (king is more valuable than regular piece)
             let bestMove = captureMoves[0];
             let bestScore = -Infinity;
             
@@ -987,7 +873,6 @@
                 const capturedPiece = board[move.captured.row][move.captured.col].piece;
                 let score = capturedPiece.isKing ? 3 : 1;
                 
-                // Also consider if this move creates a king
                 const piece = board[move.fromRow][move.fromCol].piece;
                 if (!piece.isKing && piece.type === 'ai' && move.toRow === 0) {
                     score += 2;
@@ -1002,9 +887,7 @@
             return bestMove;
         }
 
-        // Choose a strategic move (for non-capture moves)
         function chooseStrategicMove(moves) {
-            // Evaluate each move and choose the best one
             let bestMove = null;
             let bestScore = -Infinity;
             
@@ -1019,56 +902,38 @@
             return bestMove;
         }
 
-        // Evaluate a move
         function evaluateMove(move) {
             let score = 0;
             const piece = board[move.fromRow][move.fromCol].piece;
             
-            // Prefer moves that advance toward kinging
             if (!piece.isKing) {
                 if (piece.type === 'ai') {
-                    // AI pieces want to move upward (row decreasing)
                     score += (move.fromRow - move.toRow) * 2;
-                    
-                    // Extra bonus for reaching the last row
-                    if (move.toRow === 0) {
-                        score += 10;
-                    }
+                    if (move.toRow === 0) score += 10;
                 } else {
-                    // Human pieces want to move downward (row increasing)
                     score += (move.toRow - move.fromRow) * 2;
-                    
-                    // Extra bonus for reaching the last row
-                    if (move.toRow === 7) {
-                        score += 10;
-                    }
+                    if (move.toRow === 7) score += 10;
                 }
             } else {
-                // Kings should stay in the center for better control
                 const fromCenter = Math.abs(move.fromRow - 3.5) + Math.abs(move.fromCol - 3.5);
                 const toCenter = Math.abs(move.toRow - 3.5) + Math.abs(move.toCol - 3.5);
                 score += (fromCenter - toCenter) * 0.5;
             }
             
-            // Prefer moves that control the center
             const centerDistance = Math.abs(move.toRow - 3.5) + Math.abs(move.toCol - 3.5);
             score += (8 - centerDistance) * 0.3;
             
-            // Prefer moves that don't leave pieces vulnerable
             if (!isPieceSafe(move.toRow, move.toCol, piece.type)) {
                 score -= 5;
             }
             
-            // Prefer moves that create future capture opportunities
             const futureCaptures = getValidMoves(move.toRow, move.toCol).filter(m => m.isCapture).length;
             score += futureCaptures * 3;
             
             return score;
         }
 
-        // Check if a piece is safe from immediate capture
         function isPieceSafe(row, col, player) {
-            // Check all opponent pieces that could capture this piece
             const opponent = player === 'human' ? 'ai' : 'human';
             
             for (let r = 0; r < 8; r++) {
@@ -1092,7 +957,7 @@
         function updateMoveHistory(fromRow, fromCol, toRow, toCol, isCapture, isAI) {
             const fromNotation = `${String.fromCharCode(97 + fromCol)}${8 - fromRow}`;
             const toNotation = `${String.fromCharCode(97 + toCol)}${8 - toRow}`;
-            const player = isAI ? 'AI' : 'Human';
+            const player = isAI ? 'AI' : 'Inson';
             const moveText = `${player}: ${fromNotation} → ${toNotation} ${isCapture ? '✗' : ''}`;
             
             moveHistory.push(moveText);
@@ -1111,7 +976,6 @@
             
             movesHistoryElement.prepend(moveElement);
             
-            // Limit history to 20 moves
             if (moveHistory.length > 20) {
                 moveHistory.shift();
                 if (movesHistoryElement.children.length > 20) {
@@ -1120,12 +984,11 @@
             }
         }
 
-        // Check if game is over
+        // Check game over
         function checkGameOver() {
             const humanMoves = getAllValidMoves('human');
             const aiMoves = getAllValidMoves('ai');
             
-            // Count pieces
             let humanPieces = 0;
             let aiPieces = 0;
             
@@ -1139,35 +1002,27 @@
                 }
             }
             
-            // Update scores
             document.getElementById('human-score').textContent = humanPieces;
             document.getElementById('ai-score').textContent = aiPieces;
             
-            // Check win conditions
             if (humanPieces === 0 || humanMoves.length === 0) {
                 gameOver = true;
-                const minutes = Math.floor((240 - gameTime) / 60);
-                const seconds = (240 - gameTime) % 60;
-                document.getElementById('game-status').textContent = `AI WINS! You lost in ${minutes}m ${seconds}s`;
+                document.getElementById('game-status').textContent = 'AI G\'ALABA QOZONDI!';
                 document.getElementById('game-status').className = 'bg-red-900 p-4 rounded-lg text-center text-xl font-bold game-over';
-                clearInterval(timerInterval);
                 return;
             }
             
             if (aiPieces === 0 || aiMoves.length === 0) {
                 gameOver = true;
-                document.getElementById('game-status').textContent = 'IMPOSSIBLE! Human wins???';
+                document.getElementById('game-status').textContent = 'MUMKIN EMAS! Inson g\'alaba qozondi?!';
                 document.getElementById('game-status').className = 'bg-green-900 p-4 rounded-lg text-center text-xl font-bold game-over';
-                clearInterval(timerInterval);
                 return;
             }
             
-            // Check for draw (very unlikely with this AI)
             if (moveHistory.length > 100) {
                 gameOver = true;
-                document.getElementById('game-status').textContent = 'DRAW!';
+                document.getElementById('game-status').textContent = 'DURANG!';
                 document.getElementById('game-status').className = 'bg-yellow-900 p-4 rounded-lg text-center text-xl font-bold game-over';
-                clearInterval(timerInterval);
             }
         }
 
@@ -1177,60 +1032,16 @@
             
             const statusElement = document.getElementById('game-status');
             if (currentPlayer === 'human') {
-                statusElement.textContent = 'Human\'s Turn';
+                statusElement.textContent = 'Inson navbati';
                 statusElement.className = 'bg-blue-900 p-4 rounded-lg text-center text-xl font-bold';
             } else {
-                statusElement.textContent = 'AI\'s Turn';
+                statusElement.textContent = 'AI navbati';
                 statusElement.className = 'bg-purple-900 p-4 rounded-lg text-center text-xl font-bold';
             }
         }
 
-        // Timer functions
-        function startTimer() {
-            clearInterval(timerInterval);
-            gameTime = 240; // 4 minutes
-            
-            updateTimerDisplay();
-            
-            timerInterval = setInterval(() => {
-                gameTime--;
-                updateTimerDisplay();
-                
-                if (gameTime <= 0) {
-                    clearInterval(timerInterval);
-                    // Time's up - human loses
-                    gameOver = true;
-                    document.getElementById('game-status').textContent = 'TIME\'S UP! AI WINS!';
-                    document.getElementById('game-status').className = 'bg-red-900 p-4 rounded-lg text-center text-xl font-bold game-over';
-                } else if (gameTime <= 30) {
-                    // Last 30 seconds warning
-                    document.getElementById('timer').classList.add('timer-warning');
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(gameTime / 60);
-            const seconds = gameTime % 60;
-            document.getElementById('timer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            const percentage = (gameTime / 240) * 100;
-            document.getElementById('timer-bar').style.width = `${percentage}%`;
-            
-            // Change color based on time
-            if (percentage <= 20) {
-                document.getElementById('timer-bar').className = 'bg-red-500 h-full';
-            } else if (percentage <= 50) {
-                document.getElementById('timer-bar').className = 'bg-yellow-500 h-full';
-            } else {
-                document.getElementById('timer-bar').className = 'bg-green-500 h-full';
-            }
-        }
-
-        // Save board state for undo
+        // Save and undo functions (unchanged)
         function saveBoardState() {
-            // Deep copy of board
             const state = [];
             for (let row = 0; row < 8; row++) {
                 state[row] = [];
@@ -1251,23 +1062,18 @@
                 moveCount: moveHistory.length
             });
             
-            // Limit history to 10 states
             if (boardHistory.length > 10) {
                 boardHistory.shift();
             }
         }
 
-        // Undo last move
         function undoMove() {
             if (boardHistory.length < 2 || gameOver || aiThinking) return;
             
-            // Remove current state
             boardHistory.pop();
             
-            // Restore previous state
             const prevState = boardHistory[boardHistory.length - 1];
             
-            // Restore board
             for (let row = 0; row < 8; row++) {
                 for (let col = 0; col < 8; col++) {
                     const squareState = prevState.board[row][col];
@@ -1275,10 +1081,8 @@
                 }
             }
             
-            // Restore current player
             currentPlayer = prevState.currentPlayer;
             
-            // Restore move history
             const movesToRemove = moveHistory.length - prevState.moveCount;
             for (let i = 0; i < movesToRemove; i++) {
                 moveHistory.pop();
@@ -1288,24 +1092,20 @@
                 }
             }
             
-            // Reset selection
             selectedPiece = null;
             validMoves = [];
             
-            // Update UI
             renderBoard();
             updateGameInfo();
             checkGameOver();
         }
 
-        // Provide hint
         function provideHint() {
             if (currentPlayer !== 'human' || gameOver || aiThinking) return;
             
             const humanMoves = getAllValidMoves('human');
             if (humanMoves.length === 0) return;
             
-            // Choose a good move for hint
             let bestMove = null;
             let bestScore = -Infinity;
             
@@ -1318,23 +1118,19 @@
             }
             
             if (bestMove) {
-                // Highlight the piece and move
                 selectedPiece = { row: bestMove.fromRow, col: bestMove.fromCol };
                 validMoves = [bestMove];
                 renderBoard();
                 
-                // Highlight selected piece
                 const pieceElement = document.querySelector(`.piece[data-row="${bestMove.fromRow}"][data-col="${bestMove.fromCol}"]`);
                 if (pieceElement) {
                     pieceElement.classList.add('selected');
                 }
                 
-                // Show hint message
                 const statusElement = document.getElementById('game-status');
-                statusElement.textContent = 'Hint: Suggested move highlighted';
+                statusElement.textContent = 'Maslahat: Taklif etilgan yurish belgilandi';
                 statusElement.className = 'bg-yellow-900 p-4 rounded-lg text-center text-xl font-bold';
                 
-                // Reset after 3 seconds
                 setTimeout(() => {
                     if (currentPlayer === 'human' && !gameOver) {
                         selectedPiece = null;
@@ -1348,7 +1144,6 @@
 
         // Event Listeners
         document.getElementById('new-game').addEventListener('click', () => {
-            // Reset game
             selectedPiece = null;
             validMoves = [];
             currentPlayer = 'human';
@@ -1357,18 +1152,15 @@
             boardHistory = [];
             aiThinking = false;
             
-            // Clear moves history display
             document.getElementById('moves-history').innerHTML = 
-                '<div class="text-gray-400 text-center py-4">No moves yet. Make the first move!</div>';
+                '<div class="text-gray-400 text-center py-4">Hozircha yurish yo\'q. Birinchi yurishni qiling!</div>';
             
-            // Initialize new game
             initGame();
         });
 
         document.getElementById('undo-move').addEventListener('click', undoMove);
         document.getElementById('hint').addEventListener('click', provideHint);
 
-        // Initialize game when page loads
         window.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
